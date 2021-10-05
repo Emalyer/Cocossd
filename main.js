@@ -1,8 +1,9 @@
 img="";
+objects=[];
 status="";
 
 function preload(){
-img=loadImage("dog_cat.jpg");
+img=loadImage("https://miro.medium.com/max/1200/1*9QIrjaw57WOd0OvMVCMAmQ.jpeg");
 }
 
 function setup(){
@@ -14,16 +15,18 @@ document.getElementById("status").innerHTML="Status: Detecting Object";
 
 function draw(){
 image(img,0,0,640,420);
-fill("#382016");
-text("Dog",45,75);
-noFill();
-stroke("#7990F7");
-rect(30,60,450,350);
-fill("#432B57");
-text("Cat",381,75);
-noFill();
-stroke("#A8F7AA");
-rect(280,60,300,350);
+
+if(status!=""){
+    for(i=0;i<objects.length;i++){
+        document.getElementById("status").innerHTML="Status: Object detected";
+        fill("#ff0000");
+        percent=floor(objects[i].confidence*100);
+        text(objects[i].label+" "+percent+"%",objects[i].x+15,objects[i].y+15);
+        noFill();
+        stroke("#ff0000");
+        rect(objects[i].x,objects[i].y,objects[i].width,objects[i].height);
+    }
+}
 }
 
 function modelLoaded(){
@@ -38,5 +41,6 @@ function gotResult(error,results){
     }
     else{
         console.log(results);
+        objects=results;
     }
 }
